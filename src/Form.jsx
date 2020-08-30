@@ -1,20 +1,33 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 
-const Form = ({children}) => {
-    console.log(children);
+const Form = ({ children, ...props }) => {
 
-    React.Children.map(children, child => {
+    // const childrenRefs = useRef([]); 
 
-        let childModified = React.cloneElement(child, {
-            ref: child.props.name
+    const childrenRefs = useRef([]);
+    const INITIAL_STATE = {};
+
+    useEffect(() => {
+        const fieldKeys = Object.keys(childrenRefs.current);
+        fieldKeys.map(field => {
+            INITIAL_STATE[field] = ''
         });
-        return childModified;
-    });
+    }, []);
 
-    console.log(children)
+
     return(
         <form>
-            {children}
+            {
+                React.Children.map(children, (child, index) => {
+                    if(child.type !== 'button') {
+                        return React.cloneElement(child, {
+                            ref: (ref) => (childrenRefs.current[child.props.name] = ref)
+                        });
+                    } else {
+                        return child;
+                    }
+                })
+            }
         </form>
     );
 }

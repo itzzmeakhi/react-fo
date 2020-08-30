@@ -10,7 +10,7 @@ const App = () => {
       <InputField
         type = 'text'
         name = 'userName'
-        placeholder = 'Your Name' 
+        placeholder = 'Your Name'
         autocomplete = 'off' />
 
       <InputField
